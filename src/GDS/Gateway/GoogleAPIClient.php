@@ -62,6 +62,9 @@ class GoogleAPIClient extends \GDS\Gateway
     public static function createGoogleClient($str_app_name, $str_service_account, $str_key_file)
     {
         $obj_client = new \Google_Client();
+        if('2' === $obj_client->getLibraryVersion()[0]) {
+            throw new \RuntimeException("Not supported with Google API 2");
+        }
         $obj_client->setApplicationName($str_app_name);
         $str_key = file_get_contents($str_key_file);
         $obj_client->setAssertionCredentials(
@@ -85,12 +88,16 @@ class GoogleAPIClient extends \GDS\Gateway
     public static function createClientFromJson($str_json_file)
     {
         $obj_client = new \Google_Client();
-        $obj_client->setAssertionCredentials($obj_client->loadServiceAccountJson(
-            $str_json_file,
-            [\Google_Service_Datastore::DATASTORE, \Google_Service_Datastore::USERINFO_EMAIL]
-        ));
-        // App Engine php55 runtime dev server problems...
-        $obj_client->setClassConfig('Google_Http_Request', 'disable_gzip', TRUE);
+        if('2' === $obj_client->getLibraryVersion()[0]) {
+            $obj_client->setAuthConfig($str_json_file);
+        } else {
+            $obj_client->setAssertionCredentials($obj_client->loadServiceAccountJson(
+                $str_json_file,
+                [\Google_Service_Datastore::DATASTORE, \Google_Service_Datastore::USERINFO_EMAIL]
+            ));
+            // App Engine php55 runtime dev server problems...
+            $obj_client->setClassConfig('Google_Http_Request', 'disable_gzip', TRUE);
+        }
         return $obj_client;
     }
 
