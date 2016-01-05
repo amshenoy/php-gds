@@ -1,7 +1,8 @@
 <?php
 
-use GuzzleHttp\Message\RequestInterface;
-
+/**
+ * Class FakeGuzzleClient
+ */
 class FakeGuzzleClient extends GuzzleHttp\Client
 {
 
@@ -21,14 +22,17 @@ class FakeGuzzleClient extends GuzzleHttp\Client
     protected $str_expected_response = null;
 
     /**
-     * @param RequestInterface $request
-     * @return \GuzzleHttp\Message\Response
+     * Fake send
+     *
+     * @param \Psr\Http\Message\RequestInterface $request
+     * @param array $options
+     * @return \GuzzleHttp\Psr7\Response
      */
-    public function send(RequestInterface $request)
+    public function send(Psr\Http\Message\RequestInterface $request, array $options = [])
     {
         PHPUnit_Framework_Assert::assertEquals($this->str_request_body_for_testing, $request->getBody()->__toString());
-        PHPUnit_Framework_Assert::assertEquals($this->str_request_url_for_testing, $request->getUrl());
-        return new \GuzzleHttp\Message\Response(200, [], \GuzzleHttp\Stream\Stream::factory($this->str_expected_response));
+        PHPUnit_Framework_Assert::assertEquals($this->str_request_url_for_testing, $request->getUri());
+        return new GuzzleHttp\Psr7\Response(200, [], $this->str_expected_response);
     }
 
     /**

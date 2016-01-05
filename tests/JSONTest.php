@@ -197,7 +197,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
         $obj_store = new \GDS\Store('Book', $obj_gateway);
         $this->expectRequest(
             'https://www.googleapis.com/datastore/v1beta2/datasets/Dataset/beginTransaction',
-            '[]',
+            '',
             '{"transaction":"EeDoHGJsLR4eGjkABRmGMYV-Vj6Gtwn3ayLOvPX8ccUzuR4NZG0MMhmD28O-3gTTwdIUINZeJBk22kubBQPd0-Nz1sY="}'
         );
         $obj_store->beginTransaction();
@@ -447,7 +447,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $this->expectRequest(
             'https://www.googleapis.com/datastore/v1beta2/datasets/Dataset/beginTransaction',
-            '[]',
+            '',
             '{"transaction":"EeDoHGJsLR4eGjkABRmGMYV-Vj6Gtwn3ayLOvPX8ccUzuR4NZG0MMhmD28O-3gTTwdIUINZeJBk22kubBQPd0-Nz1sY="}'
         );
         $obj_store->beginTransaction();
